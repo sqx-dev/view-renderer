@@ -1,5 +1,6 @@
 /*
- * KasmVNC: HTML5 VNC client
+ * SquareX View Renderer
+ * Copyright (C) 2023 SquareX
  * Copyright (C) 2020 Kasm Technologies
  * Copyright (C) 2020 The noVNC Authors
  * Licensed under MPL 2.0 (see LICENSE.txt)
@@ -236,6 +237,7 @@ export default class RFB extends EventTargetMixin {
         this._screen.style.background = DEFAULT_BACKGROUND;
         this._canvas = document.createElement('canvas');
         this._canvas.style.margin = 'auto';
+        this._canvas.classList.add('main-viewer');
         // Some browsers add an outline on focus
         this._canvas.style.outline = 'none';
         this._canvas.width = 0;
