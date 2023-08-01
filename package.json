@@ -1,7 +1,7 @@
 {
-  "name": "@kasmtech/novnc",
-  "version": "1.3.0",
-  "description": "An HTML5 VNC client",
+  "name": "@squarex/view-renderer",
+  "version": "2.0.8",
+  "description": "Client application for interacting with SquareX disposable instances",
   "browser": "lib/rfb",
   "directories": {
     "lib": "lib",
@@ -19,58 +19,35 @@
     "vendor/pako"
   ],
   "scripts": {
-    "lint": "eslint app core po/po2js po/xgettext-html tests utils",
-    "dev": "webpack-dev-server --env alpha --config webpack.config.js --watch --hot --debug",
-    "_dev": "webpack-dev-server --config webpack.config.js --hot --debug --devtool source-map --output-pathinfo",
+    "typecheck": "tsc --watch --project tsconfig.json --preserveWatchOutput",
+    "dev": "node ./scripts/dev.js",
     "test": "karma start karma.conf.js",
-    "prepublish": "node ./utils/use_require.js --clean",
-    "_build": "webpack --mode=production --config webpack.config.js",
-    "makeBuildDir": "rm -Rf ../build-assets/Mini-Portal-View-Renderer && mkdir -p ../build-assets/Mini-Portal-View-Renderer",
-    "copyAssets": "cp -R ./ ../build-assets/Mini-Portal-View-Renderer/",
-    "deleteUnwantedFiles": "cd ../build-assets/Mini-Portal-View-Renderer && rm -Rf node_modules pnpm-lock.yaml tests AUTHORS docs karma.conf.js LICENSE.txt README.md webpack.config.js ./package-lock.json ./\\~ .git .gitignore .env .eslintrc .gitmodules .prettierrc ;",
-    "zipAssets": "zip -r ../build-assets/Mini-Portal-View-Renderer.zip ../build-assets/Mini-Portal-View-Renderer && rm -Rf ../build-assets/Mini-Portal-View-Renderer",
-    "build": "pnpm run _build && pnpm run makeBuildDir && pnpm run copyAssets && pnpm run deleteUnwantedFiles",
-    "alpha": "webpack --env alpha --mode=production --config webpack.config.js",
-    "build-production": "cross-env NODE_ENV=production webpack --mode=production --config webpack.config.js"
+    "build": "node ./scripts/build.js",
+    "build:dev": "node ./scripts/build.js --env=dev",
+    "build:public": "node ./scripts/build.js --env=public",
+    "create-release": "node ./scripts/create-release.js",
+    "make-artifacts": "mkdir -p ./.artifacts/releases && rm -f ./.artifacts/releases/* && rm -f ./.artifacts/*.js && node ./scripts/scripts.esbuild.mjs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kasmtech/noVNC.git"
+    "url": "git+https://github.com/SquareX-Labs/extension-view-renderer"
   },
-  "author": "Kasm Technologies (https://www.kasmweb.com)",
+  "author": "SquareX (https://www.sqrx.com)",
   "contributors": [],
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/kasmtech/noVNC/issues"
+    "url": "https://github.com/SquareX-Labs/extension-view-renderer/issues"
   },
-  "homepage": "https://github.com/kasmtech/noVNC",
+  "homepage": "https://github.com/SquareX-Labs/extension-view-renderer",
   "devDependencies": {
-    "@babel/cli": "*",
-    "@babel/core": "*",
-    "@babel/plugin-syntax-dynamic-import": "*",
-    "@babel/plugin-transform-modules-commonjs": "*",
-    "@babel/preset-env": "*",
     "@chiragrupani/karma-chromium-edge-launcher": "*",
-    "babel-loader": "^8.2.2",
-    "babel-plugin-import-redirect": "*",
-    "babelify": "*",
-    "browserify": "*",
     "chai": "*",
     "clean-webpack-plugin": "^3.0.0",
     "commander": "*",
     "core-js": "^3.18.3",
-    "cross-env": "^7.0.3",
-    "css-loader": "^5.0.1",
-    "css-minimizer-webpack-plugin": "^1.1.5",
-    "dotenv-webpack": "^8.0.1",
-    "es-module-loader": "*",
     "eslint": "^8.37.0",
-    "file-loader": "^6.2.0",
     "fs": "0.0.1-security",
     "fs-extra": "*",
-    "html-loader": "^1.3.2",
-    "html-webpack-inline-svg-plugin": "^2.3.0",
-    "html-webpack-plugin": "^4.5.2",
     "jsdom": "*",
     "karma": "*",
     "karma-chrome-launcher": "*",
@@ -81,25 +58,13 @@
     "karma-safari-launcher": "*",
     "karma-script-launcher": "*",
     "karma-sinon-chai": "*",
-    "mini-css-extract-plugin": "^1.3.3",
-    "minimist": "^1.2.8",
     "mocha": "*",
     "node-getopt": "*",
     "po2json": "*",
     "postcss": "7.0.0",
-    "postcss-loader": "^4.1.0",
-    "preload-webpack-plugin": "^3.0.0-beta.4",
-    "regenerator-runtime": "^0.13.9",
-    "requirejs": "*",
-    "rollup": "*",
-    "rollup-plugin-node-resolve": "*",
-    "sass": "^1.30.0",
-    "sass-loader": "^10.1.0",
+    "prettier": "^2.8.8",
     "sinon": "*",
-    "sinon-chai": "^2.8.0",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.8.1"
+    "sinon-chai": "^2.8.0"
   },
   "keywords": [
     "vnc",
@@ -108,7 +73,10 @@
     "websockify"
   ],
   "dependencies": {
-    "firebase": "^9.22.0",
-    "jsmpeg-player": "^3.0.3"
+    "@types/chrome": "^0.0.239",
+    "concurrently": "^8.2.0",
+    "dealwith": "^1.2.1",
+    "esbuild": "^0.18.17",
+    "typescript": "^5.1.5"
   }
 }

@@ -334,7 +334,7 @@ export default class RFB extends EventTargetMixin {
             // Delete reference to raw channel to allow cleanup.
             this._rawChannel = null;
         });
-        this._sock.on('error', e => Log.Warn("WebSocket on-error event"));
+        this._sock.on('error', e => Log.Warn("WebSocket on-error event", e));
 
         // Slight delay of the actual connection so that the caller has
         // time to set up callbacks

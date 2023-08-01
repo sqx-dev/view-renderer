@@ -1,0 +1,30 @@
+import { BuildEnvironment } from './definition';
+
+export const DEFAULT_ENVIRONMENT: BuildEnvironment = {
+  prevent_navigation: true,
+  max_rfb_reconnect_retries: 10,
+  rfb_reconnect_interval: 2000,
+  file_upload_extension_whitelist: [
+    '.csv',
+    '.doc',
+    '.docx',
+    '.gif',
+    '.html',
+    '.jpeg',
+    '.jpg',
+    '.json',
+    '.mp3',
+    '.mp4',
+    '.mpeg',
+    '.png',
+    '.pdf',
+    '.ppt',
+    '.pptx',
+    '.svg',
+    '.txt',
+    '.xls',
+    '.xlsx',
+    '.xml',
+    '.zip',
+  ],
+};

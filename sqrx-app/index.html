@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+  <head>
+    <!--
+    noVNC example: simple example using default UI
+    Copyright (C) 2019 The noVNC Authors
+    noVNC is licensed under the MPL 2.0 (see LICENSE.txt)
+    This file is licensed under the 2-Clause BSD license (see LICENSE.txt).
+
+    Connect parameters are provided in query string:
+        http://example.com/?host=HOST&port=PORT&encrypt=1
+    or the fragment:
+        http://example.com/#host=HOST&port=PORT&encrypt=1
+    -->
+    <title>SquareX</title>
+
+    <meta charset="utf-8" />
+    <!-- STYLE_REPLACEMENT_AREA -->
+
+    <!-- Icons (see app/images/icons/Makefile for what the sizes are for) -->
+    <link
+      rel="icon"
+      sizes="64x64"
+      type="image/png"
+      media="(prefers-color-scheme: light)"
+      href="images/icons/squarex_lighttheme.png"
+    />
+    <link
+      rel="icon"
+      sizes="64x64"
+      type="image/png"
+      media="(prefers-color-scheme: dark)"
+      href="images/icons/squarex_darktheme.png"
+    />
+    <!-- Firefox currently mishandles SVG, see #1419039
+    <link rel="icon" sizes="any" type="image/svg+xml" href="images/icons/kasm-icon.svg">
+    -->
+    <!-- Repeated last so that legacy handling will pick this -->
+
+    <!-- Apple iOS Safari settings -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <!-- Home Screen Icons (favourites and bookmarks use the normal icons) -->
+  </head>
+
+  <body>
+    <div id="noVNC_fallback_error" class="noVNC_center">
+      <div>
+        <div>noVNC encountered an error:</div>
+        <br />
+        <div id="noVNC_fallback_errormsg"></div>
+      </div>
+    </div>
+
+    <!-- This is where the RFB elements will attach -->
+    <div id="noVNC_container">
+      <!-- Note that Google Chrome on Android doesn't respect any of these,
+             html attributes which attempt to disable text suggestions on the
+             on-screen keyboard. Let's hope Chrome implements the ime-mode
+             style for example -->
+      <textarea
+        id="noVNC_keyboardinput"
+        autocapitalize="off"
+        autocomplete="off"
+        spellcheck="false"
+        tabindex="-1"
+      ></textarea>
+    </div>
+    <div id="sqrx-cover-screen"></div>
+    <div id="sqrx-loading-content" class="anim-cont">
+      <h2 id="loading-heading" class="heading blue loading-head">
+        Preparing SquareX
+      </h2>
+      <div class="store-container">
+        <div class="border-animation blue">
+          <svg
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            class="store"
+            viewBox="0 -30 1230 930"
+          >
+            <title>SquareX Loading</title>
+            <defs>
+              <g class="_plane">
+                <path
+                  fill="#FFF"
+                  class="stroke"
+                  d="M506.9 253.6H21.2c-6.6 0-12-5.4-12-12v-56.7c0-6.6 5.4-12 12-12h485.8c6.6 0 12 5.4 12 12v56.7C518.9 248.2 513.5 253.6 506.9 253.6z"
+                ></path>
+                <text
+                  transform="matrix(1.0027 0 0 1 44.8218 224.8768)"
+                  font-family="Open Sans"
+                  font-size="30"
+                  fill="#0170BB"
+                >
+                  Please wait while we are preparing the disposable session
+                </text>
+              </g>
+            </defs>
+            <g class="window">
+              <path
+                opacity="0.4"
+                class="loading-browser-content"
+                d="M 110 180 H 1086 Q 1106 180 1106 200 V 780 Q 1106 800 1086 800 H 110 Q 90 800 90 780 V 200 Q 90 180 110 180 Z"
+              ></path>
+              <path
+                fill="none"
+                class="stroke"
+                d="M 110 180 H 1086 Q 1106 180 1106 200 V 780 Q 1106 800 1086 800 H 110 Q 90 800 90 780 V 200 Q 90 180 110 180 Z"
+              ></path>
+            </g>
+            <use class="box" xlink:href="#box" x="20" y="30"></use>
+            <use class="plane" xlink:href="#plane" y="-80"></use>
+            <g class="browser">
+              <path
+                fill="none"
+                class="stroke"
+                d="M 1160 830 H 70 Q 50 830 50 810 V 70 Q 50 50 70 50 H 1160 Q 1180 50 1180 70 V 810 Q 1180 830 1160 830 Z"
+              ></path>
+              <circle
+                opacity="0.4"
+                fill="#ED4F43"
+                cx="100"
+                cy="105"
+                r="12.3"
+              ></circle>
+              <circle
+                fill="none"
+                class="stroke"
+                cx="100"
+                cy="105"
+                r="12.3"
+              ></circle>
+              <circle
+                fill="none"
+                class="stroke"
+                cx="150"
+                cy="105"
+                r="12.3"
+              ></circle>
+              <path
+                fill="none"
+                stroke="#0170BB"
+                class="stroke"
+                d="M 210 90 H 1100 Q 1110 90 1110 100 V 110 Q 1110 120 1100 120 H 210 Q 200 120 200 110 V 100 Q 200 90 210 90 Z"
+              ></path>
+            </g>
+            <g class="text">
+              <line
+                fill="none"
+                class="stroke round-end"
+                x1="160"
+                y1="230"
+                x2="1050"
+                y2="230"
+              ></line>
+              <line
+                fill="none"
+                class="stroke round-end"
+                x1="160"
+                y1="280"
+                x2="1000"
+                y2="280"
+              ></line>
+              <line
+                fill="none"
+                class="stroke round-end"
+                x1="160"
+                y1="330"
+                x2="1050"
+                y2="330"
+              ></line>
+              <line
+                fill="none"
+                class="stroke round-end"
+                x1="160"
+                y1="380"
+                x2="1000"
+                y2="380"
+              ></line>
+              <path
+                fill="none"
+                d="M180,480h850a20,20 0 0 1 20,20v200a20,20 0 0 1 -20,20h-850a-20,-20 0 0 1 -20,-20v-200a20,-20 0 0 1 20,-20z"
+                class="stroke"
+              ></path>
+              <path
+                class="loading-inner-browser"
+                d="M180,480h850a20,20 0 0 1 20,20v200a20,20 0 0 1 -20,20h-850a-20,-20 0 0 1 -20,-20v-200a20,-20 0 0 1 20,-20z"
+                opacity="0.4"
+              ></path>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div id="sqrx-error-content" class="error-anim-cont _hidden">
+      <h2 id="error-heading" class="heading heading-error"></h2>
+      <div class="store-container">
+        <div class="border-animation red">
+          <svg
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            class="store"
+            viewBox="0 -30 1230 930"
+          >
+            <title>Preparing SquareX</title>
+            <defs>
+              <g class="_plane">
+                <path
+                  fill="#FFF"
+                  class="stroke"
+                  d="M506.9 253.6H21.2c-6.6 0-12-5.4-12-12v-56.7c0-6.6 5.4-12 12-12h485.8c6.6 0 12 5.4 12 12v56.7C518.9 248.2 513.5 253.6 506.9 253.6z"
+                ></path>
+                <text
+                  transform="matrix(1.0027 0 0 1 44.8218 224.8768)"
+                  font-family="Open Sans"
+                  font-size="30"
+                  fill="#0170BB"
+                >
+                  Please wait while we are preparing the disposable session
+                </text>
+              </g>
+            </defs>
+            <g class="window">
+              <path
+                opacity="0.4"
+                fill="#B51B1B22"
+                d="M 110 180 H 1086 Q 1106 180 1106 200 V 780 Q 1106 800 1086 800 H 110 Q 90 800 90 780 V 200 Q 90 180 110 180 Z"
+              ></path>
+              <path
+                fill="none"
+                class="stroke red"
+                d="M 110 180 H 1086 Q 1106 180 1106 200 V 780 Q 1106 800 1086 800 H 110 Q 90 800 90 780 V 200 Q 90 180 110 180 Z"
+              ></path>
+            </g>
+            <use class="box" xlink:href="#box" x="20" y="30"></use>
+            <use class="plane" xlink:href="#plane" y="-80"></use>
+            <g class="browser error">
+              <path
+                fill="none"
+                class="stroke"
+                d="M 1160 830 H 70 Q 50 830 50 810 V 70 Q 50 50 70 50 H 1160 Q 1180 50 1180 70 V 810 Q 1180 830 1160 830 Z"
+              ></path>
+              <circle
+                opacity="0.4"
+                fill="#ED4F43"
+                cx="100"
+                cy="105"
+                r="12.3"
+              ></circle>
+              <circle
+                fill="none"
+                class="stroke"
+                cx="100"
+                cy="105"
+                r="12.3"
+              ></circle>
+              <circle
+                fill="none"
+                class="stroke"
+                cx="150"
+                cy="105"
+                r="12.3"
+              ></circle>
+              <path
+                fill="none"
+                stroke="#0170BB"
+                class="stroke"
+                d="M 210 90 H 1100 Q 1110 90 1110 100 V 110 Q 1110 120 1100 120 H 210 Q 200 120 200 110 V 100 Q 200 90 210 90 Z"
+              ></path>
+            </g>
+            <g class="text">
+              <line
+                fill="none"
+                class="stroke round-end red"
+                x1="160"
+                y1="230"
+                x2="1050"
+                y2="230"
+              ></line>
+              <line
+                fill="none"
+                class="stroke round-end red"
+                x1="160"
+                y1="280"
+                x2="1000"
+                y2="280"
+              ></line>
+              <line
+                fill="none"
+                class="stroke round-end red"
+                x1="160"
+                y1="330"
+                x2="1050"
+                y2="330"
+              ></line>
+              <line
+                fill="none"
+                class="stroke round-end red"
+                x1="160"
+                y1="380"
+                x2="1000"
+                y2="380"
+              ></line>
+              <path
+                fill="none"
+                d="M180,480h850a20,20 0 0 1 20,20v200a20,20 0 0 1 -20,20h-850a-20,-20 0 0 1 -20,-20v-200a20,-20 0 0 1 20,-20z"
+                class="stroke red"
+              ></path>
+              <path
+                fill="#B51B1B22"
+                d="M180,480h850a20,20 0 0 1 20,20v200a20,20 0 0 1 -20,20h-850a-20,-20 0 0 1 -20,-20v-200a20,-20 0 0 1 20,-20z"
+                opacity="0.4"
+              ></path>
+            </g>
+            <text
+              id="error-message-1"
+              class="session-lost"
+              transform="translate(275, 550)"
+              font-family="Open Sans"
+              font-size="32"
+              fill="#aba4f7"
+            >
+              All your browsing history has been deleted
+            </text>
+            <text
+              id="error-message-2"
+              class="session-lost"
+              transform="translate(400, 620)"
+              font-family="Open Sans"
+              font-size="32"
+              fill="#aba4f7"
+            >
+              Please start a new session
+            </text>
+          </svg>
+          <button id="error-reconnect-btn" class="reconnect">Reconnect</button>
+        </div>
+      </div>
+    </div>
+    <div id="modal-overlay" class="modal-back-drop invisible hidden"></div>
+    <div id="dfv-controls" class="info-box-cont hidden invisible _hidden">
+      <div id="dfv-toggle-controls-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="20"
+          viewBox="0 -960 960 960"
+          width="20"
+        >
+          <path
+            fill="white"
+            d="m561-242-43-42 168-168H160v-60h526L517-681l43-42 241 241-240 240Z"
+          />
+        </svg>
+        <span id="dfv-minimized-session-time-left" class="session-time-left"
+          >--:--</span
+        >
+      </div>
+      <div class="controls">
+        <button
+          data-tooltip=""
+          title="Upload files"
+          id="dfv-uploader-btn"
+          class="sqx-button"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 -960 960 960"
+            width="24"
+          >
+            <path
+              d="M220-160q-24 0-42-18t-18-42v-143h60v143h520v-143h60v143q0 24-18 42t-42 18H220Zm230-153v-371L330-564l-43-43 193-193 193 193-43 43-120-120v371h-60Z"
+            />
+          </svg>
+        </button>
+        <button
+          data-tooltip=""
+          title="Download files"
+          id="dfv-downloader-btn"
+          class="sqx-button"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 -960 960 960"
+            width="24"
+          >
+            <path
+              d="M220-160q-24 0-42-18t-18-42v-143h60v143h520v-143h60v143q0 24-18 42t-42 18H220Zm260-153L287-506l43-43 120 120v-371h60v371l120-120 43 43-193 193Z"
+            />
+          </svg>
+        </button>
+        <button
+          data-tooltip=""
+          title="Share File Viewer"
+          id="dfv-copy-session-btn"
+          class="sqx-button"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 -960 960 960"
+            width="24"
+          >
+            <path
+              d="M180-81q-24 0-42-18t-18-42v-603h60v603h474v60H180Zm120-120q-24 0-42-18t-18-42v-560q0-24 18-42t42-18h440q24 0 42 18t18 42v560q0 24-18 42t-42 18H300Zm0-60h440v-560H300v560Zm0 0v-560 560Z"
+            />
+          </svg>
+        </button>
+        <button
+          data-tooltip=""
+          title="Toggle Audio"
+          data-state="disabled"
+          id="dfv-audio-toggle"
+          class="sqx-button"
+          data-audio-toggle="true"
+        >
+          <div id="dfv-audio-enabled-icon" class="_hidden no-pointer-events">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 -960 960 960"
+              width="24"
+            >
+              <path
+                d="M560-131v-62q97-28 158.5-107.5T780-481q0-101-61-181T560-769v-62q124 28 202 125.5T840-481q0 127-78 224.5T560-131ZM120-360v-240h160l200-200v640L280-360H120Zm420 48v-337q55 17 87.5 64T660-480q0 57-33 104t-87 64ZM420-648 307-540H180v120h127l113 109v-337Zm-94 168Z"
+              />
+            </svg>
+          </div>
+          <div id="dfv-audio-disabled-icon" class="no-pointer-events">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 -960 960 960"
+              width="24"
+            >
+              <path
+                d="M813-56 681-188q-28 20-60.5 34.5T553-131v-62q23-7 44.5-15.5T638-231L473-397v237L273-360H113v-240h156L49-820l43-43 764 763-43 44Zm-36-232-43-43q20-34 29.5-71.923T773-481q0-103.322-60-184.661T553-769v-62q124 28 202 125.5T833-481q0 51-14 100t-42 93ZM643-422l-90-90v-130q47 22 73.5 66t26.5 96q0 15-2.5 29.5T643-422ZM473-592 369-696l104-104v208Zm-60 286v-150l-84-84H173v120h126l114 114Zm-42-192Z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div id="dfv-upload-progress" class="progress"></div>
+      <div id="dfv-session-info">
+        File Viewer disposes in
+        <span id="dfv-session-time-left" class="session-time-left">--:--</span>
+      </div>
+    </div>
+
+    <div id="db-controls" class="info-box-cont hidden invisible _hidden">
+      <div id="db-open-controls-btn" class="info-open"></div>
+      <div class="info-head">
+        <span>SquareX Disposable Browser</span>
+        <span id="db-close-controls-btn" class="info-close-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-arrow-right"
+          >
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </span>
+      </div>
+      <div class="info-box">
+        <div class="info-unit">
+          <p class="sub-head">INTERNET</p>
+          <p id="db-stats-internet" class="main-head internet">&gt; 2 Gbps</p>
+        </div>
+        <div class="info-unit">
+          <p class="sub-head">LOCATION</p>
+          <p id="db-stats-location" class="main-head info-country location">
+            India
+          </p>
+        </div>
+        <div class="info-unit">
+          <p class="sub-head">ADS</p>
+          <p id="db-stats-ads" class="main-head ads">Blocked</p>
+        </div>
+        <div class="info-unit">
+          <p class="sub-head">MODE</p>
+          <p id="db-stats-mode" class="main-head mode">Annonymous Browsing</p>
+        </div>
+      </div>
+      <div class="controls">
+        <span class="controls-head">Controls</span>
+        <div id="db-session-time">
+          Browser disposes in<span
+            id="db-session-time-left"
+            class="session-time-left"
+            >--:--</span
+          >
+        </div>
+        <img
+          id="db-audio-toggle"
+          src="images/icons/mute.png"
+          data-state="disabled"
+          class="audio-button"
+          data-audio-toggle="true"
+        />
+        <button id="db-copy-session-btn" class="share-session sqx-button">
+          Share Disposable Browser
+        </button>
+        <button id="db-full-screen-btn" class="share-session sqx-button">
+          Full Screen Mode
+        </button>
+      </div>
+    </div>
+    <input type="file" id="dfv-file-input" class="_hidden" />
+    <h2 id="sqrx-alert-notification" class="notification">
+      SquareX Opened a suspicious link
+    </h2>
+    <div id="dfv-upload-zone" class="upload-zone _hidden">
+      <div class="drop-zone">
+        <div class="drop-zone-icon">
+          <svg
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:cc="http://creativecommons.org/ns#"
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns:svg="http://www.w3.org/2000/svg"
+            xmlns="http://www.w3.org/2000/svg"
+            width="36.000004"
+            height="35.999989"
+            viewBox="0 0 36.000004 35.999989"
+            version="1.1"
+          >
+            <g transform="translate(503.56791,-562.93364)">
+              <path
+                d="m -494.16097,562.93364 c -0.91673,0 -1.63753,0.74775 -1.63753,1.65704 v 9.03749 h 2.60871 v -8.31796 h 17.33471 v 11.67421 h 2.39842 v -12.53905 c -10e-4,-0.8283 -0.69846,-1.51173 -1.53358,-1.51173 z m 4.5936,5.03204 c -0.68463,0 -1.24054,0.61351 -1.24054,1.29374 0,0.68023 0.55708,1.29375 1.24054,1.29375 h 9.93155 c 0.68697,0 1.24056,-0.61352 1.24056,-1.29375 0,-0.68023 -0.55592,-1.29374 -1.24056,-1.29374 z m 0,4.75311 c -0.59598,0 -1.09444,0.46799 -1.21456,1.04063 0.85025,0.21517 1.62501,0.67559 2.207,1.35235 l 0.17961,0.19452 h 8.7595 c 0.68697,0 1.24056,-0.61351 1.24056,-1.29375 0,-0.68023 -0.55592,-1.29375 -1.24056,-1.29375 z m -10.527,2.5875 c -0.58783,0 -1.14624,0.273 -1.52648,0.71954 -0.37906,0.4477 -0.54102,1.06098 -0.44187,1.63593 l 0.21976,1.27969 h -0.14414 c -0.46188,0 -0.89945,0.18498 -1.19803,0.53203 -0.30324,0.34822 -0.43504,0.80158 -0.3639,1.25391 l 2.56146,16.48358 c 0.15513,0.99142 1.01386,1.72266 2.02506,1.72266 h 26.59045 c 0.46185,0 0.89943,-0.20251 1.19801,-0.5461 0.29976,-0.34706 0.43509,-0.79689 0.36626,-1.24921 l -2.5071,-16.87031 c -0.11663,-0.77046 -0.78287,-1.32656 -1.56665,-1.32656 h -12.69621 l -2.30625,-2.70703 c -0.4887,-0.56916 -1.20663,-0.92813 -1.96127,-0.92813 z m 28.19725,1.18594 0.64037,5.89453 1.5312,10.29843 2.14322,-14.45155 c 0.0595,-0.43037 -0.0663,-0.87384 -0.35445,-1.20469 -0.28576,-0.32971 -0.70398,-0.53672 -1.14368,-0.53672 z"
+                style="
+                  fill: currentColor;
+                  fill-opacity: 1;
+                  stroke: none;
+                  stroke-width: 0.99999952;
+                  stroke-opacity: 1;
+                "
+              />
+            </g>
+          </svg>
+        </div>
+        <h2>
+          Drag your documents, photos, music or videos here to view them
+          securely
+        </h2>
+        <h2 class="drop-zone-or">OR</h2>
+        <br /><br />
+        <div><button class="drop-zone-button">Browse files</button></div>
+        <!-- <p class="drop-zone-text">
+        Supported file types: .pdf, .xlsx, .pptx, .docx, .mp3, .mp4, .jpg,
+        .png.<br />(Unsupported formats may not function as intended)
+      </p> -->
+      </div>
+    </div>
+    <div id="dfv-downloads-panel" class="downloadable-files-modal hidden">
+      <div class="downloadables">
+        <span id="dfv-downloads-panel-close-btn" class="close-modal">✕</span>
+        <h2 id="dfv-downloadable-heading">No files to download</h2>
+        <div id="dfv-downloadable-item-list" class="downloadables-items"></div>
+      </div>
+    </div>
+    <div class="download-item hidden">
+      <a href="image_location.zip" download target="_blank">link_text</a>
+    </div>
+    <div class="tooltip" id="tooltip">Tooltip Text</div>
+    <script src="jsmpeg.js"></script>
+    <!-- SCRIPT_REPLACEMENT_AREA -->
+  </body>
+</html>

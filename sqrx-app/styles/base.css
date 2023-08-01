@@ -1,0 +1,314 @@
+@import url('./loader.css');
+@import url('./sqx.css');
+
+/*
+ * noVNC base CSS
+ * Copyright (C) 2019 The noVNC Authors
+ * noVNC is licensed under the MPL 2.0 (see LICENSE.txt)
+ * This file is licensed under the 2-Clause BSD license (see LICENSE.txt).
+ */
+
+/*
+ * Z index layers:
+ *
+ * 0: Main screen
+ * 10: Control bar
+ * 50: Transition blocker
+ * 60: Connection popups
+ * 100: Status bar
+ * ...
+ * 1000: Javascript crash
+ * ...
+ * 10000: Max (used for polyfills)
+ */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', 'Helvetica';
+  letter-spacing: 0.05em;
+  background: white;
+  height: 100%;
+  touch-action: none;
+}
+
+html {
+  height: 100%;
+}
+
+/* ----------------------------------------
+ * Input Elements
+ * ----------------------------------------
+ */
+
+input:not([type]),
+input[type='date'],
+input[type='datetime-local'],
+input[type='email'],
+input[type='month'],
+input[type='number'],
+input[type='password'],
+input[type='search'],
+input[type='tel'],
+input[type='text'],
+input[type='time'],
+input[type='url'],
+input[type='week'],
+textarea {
+  /* Disable default rendering */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: none;
+
+  margin: 2px;
+  padding: 2px;
+  border: 1px solid rgb(192, 192, 192);
+  border-radius: 5px;
+  color: black;
+  background: linear-gradient(
+    to top,
+    rgb(255, 255, 255) 80%,
+    rgb(240, 240, 240)
+  );
+}
+
+input[type='button'],
+input[type='color'],
+input[type='reset'],
+input[type='submit'],
+select {
+  /* Disable default rendering */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: none;
+
+  margin: 2px;
+  padding: 2px;
+  border: 1px solid rgb(192, 192, 192);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  color: black;
+  background: linear-gradient(to top, rgb(255, 255, 255), rgb(240, 240, 240));
+
+  /* This avoids it jumping around when :active */
+  vertical-align: middle;
+}
+
+input[type='button'],
+input[type='color'],
+input[type='reset'],
+input[type='submit'] {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+option {
+  color: black;
+  background: white;
+}
+
+input:not([type]):focus,
+input[type='button']:focus,
+input[type='color']:focus,
+input[type='date']:focus,
+input[type='datetime-local']:focus,
+input[type='email']:focus,
+input[type='month']:focus,
+input[type='number']:focus,
+input[type='password']:focus,
+input[type='reset']:focus,
+input[type='search']:focus,
+input[type='submit']:focus,
+input[type='tel']:focus,
+input[type='text']:focus,
+input[type='time']:focus,
+input[type='url']:focus,
+input[type='week']:focus,
+select:focus,
+textarea:focus {
+  box-shadow: 0px 0px 3px rgba(74, 144, 217, 0.5);
+  border-color: rgb(74, 144, 217);
+  outline: none;
+}
+
+input[type='button']::-moz-focus-inner,
+input[type='color']::-moz-focus-inner,
+input[type='reset']::-moz-focus-inner,
+input[type='submit']::-moz-focus-inner {
+  border: none;
+}
+
+input:not([type]):disabled,
+input[type='button']:disabled,
+input[type='color']:disabled,
+input[type='date']:disabled,
+input[type='datetime-local']:disabled,
+input[type='email']:disabled,
+input[type='month']:disabled,
+input[type='number']:disabled,
+input[type='password']:disabled,
+input[type='reset']:disabled,
+input[type='search']:disabled,
+input[type='submit']:disabled,
+input[type='tel']:disabled,
+input[type='text']:disabled,
+input[type='time']:disabled,
+input[type='url']:disabled,
+input[type='week']:disabled,
+select:disabled,
+textarea:disabled {
+  color: rgb(128, 128, 128);
+  background: rgb(240, 240, 240);
+}
+
+input[type='button']:active,
+input[type='color']:active,
+input[type='reset']:active,
+input[type='submit']:active,
+select:active {
+  border-bottom-width: 1px;
+  margin-top: 3px;
+}
+
+:root:not(.noVNC_touch) input[type='button']:hover:not(:disabled),
+:root:not(.noVNC_touch) input[type='color']:hover:not(:disabled),
+:root:not(.noVNC_touch) input[type='reset']:hover:not(:disabled),
+:root:not(.noVNC_touch) input[type='submit']:hover:not(:disabled),
+:root:not(.noVNC_touch) select:hover:not(:disabled) {
+  background: linear-gradient(to top, rgb(255, 255, 255), rgb(250, 250, 250));
+}
+
+/* ----------------------------------------
+ * WebKit centering hacks
+ * ----------------------------------------
+ */
+
+.noVNC_center {
+  /*
+   * This is a workaround because webkit misrenders transforms and
+   * uses non-integer coordinates, resulting in blurry content.
+   * Ideally we'd use "top: 50%; transform: translateY(-50%);" on
+   * the objects instead.
+   */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.noVNC_center > * {
+  pointer-events: auto;
+}
+
+/* ----------------------------------------
+ * Fallback error
+ * ----------------------------------------
+ */
+
+#noVNC_fallback_error {
+  z-index: 1000;
+  visibility: hidden;
+}
+#noVNC_fallback_error.noVNC_open {
+  visibility: hidden !important;
+}
+
+#noVNC_fallback_error > div {
+  max-width: 90%;
+  padding: 15px;
+
+  opacity: 0;
+
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+  background: rgba(33, 130, 177, 0.8);
+}
+#noVNC_fallback_error.noVNC_open > div {
+  transition: 0.5s ease-in-out;
+  opacity: 1;
+}
+
+#noVNC_fallback_errormsg {
+  font-weight: normal;
+}
+
+#noVNC_fallback_errormsg .noVNC_message {
+  display: inline-block;
+  text-align: left;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+#noVNC_fallback_error .noVNC_location {
+  font-style: italic;
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+#noVNC_fallback_error .noVNC_stack {
+  max-height: 50vh;
+  padding: 10px;
+  margin: 10px;
+  font-size: 0.8em;
+  text-align: left;
+  font-family: monospace;
+  white-space: pre;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.2);
+  overflow: auto;
+}
+
+/* ----------------------------------------
+ * Main Area
+ * ----------------------------------------
+ */
+
+/* Main container */
+#noVNC_container {
+  width: 100%;
+  height: 100%;
+}
+
+#noVNC_keyboardinput {
+  width: 0px;
+  height: 0px;
+  background-color: #fff0;
+  color: rgba(5, 5, 5, 0);
+  border: 0;
+  position: absolute;
+  left: 35%;
+  top: 40%;
+  z-index: -1;
+}
+
+/* prevent selection */
+body {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Do not use default link colors */
+a:link {
+  color: white;
+}
+a:visited {
+  color: white;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}

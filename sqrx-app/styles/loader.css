@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+.dark .anim-cont,
+.dark .error-anim-cont {
+  background-color: #2f3349;
+}
+
+.anim-cont,
+.error-anim-cont {
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: fixed;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#sqrx-cover-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 1;
+}
+
+.heading-error,
+.heading.blue {
+  color: #5c52c1;
+}
+
+.dark .heading-error,
+.dark .heading.blue {
+  color: #aba4f7;
+}
+
+.heading {
+  font-family: 'Open Sans';
+  margin-bottom: 25px;
+  font-size: 2vw;
+  text-align: center;
+}
+
+.reconnect {
+  left: 50%;
+  position: absolute;
+  top: 65%;
+  transform: translate(-50%);
+  background: #fff;
+  border: 1px solid #0470bb;
+  box-shadow: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  color: #444;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.no-controls .reconnect {
+  display: none;
+}
+
+.border-animation {
+  background-color: white;
+  border-radius: 10px;
+  position: relative;
+}
+
+.dark .border-animation {
+  background-color: #2f3349;
+}
+
+.border-animation:after {
+  border-radius: 10px;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  height: calc(100% + 10px);
+  width: calc(100% + 10px);
+  z-index: -1;
+}
+
+.border-animation.blue:after {
+  content: '';
+  cursor: pointer;
+  animation: borderGradient 4s linear both infinite;
+  background: linear-gradient(45deg, #ccc 48.9%, #5c52c1 49%);
+  background-size: 300% 300%;
+  box-shadow: 0 0 17px -9px #aba4f7;
+}
+
+.border-animation.red:after {
+  content: '';
+  cursor: pointer;
+  animation: borderGradientRed 2s linear forwards;
+  background: linear-gradient(45deg, #ccc 48.9%, #b51b1b 49%) 0 0 / 300% 300%;
+  background-size: 300% 300%;
+}
+
+.store-container {
+  line-height: 0;
+  width: 50%;
+}
+
+.stroke {
+  stroke: #5c52c1;
+  stroke-width: 5;
+  stroke-linejoin: round;
+  stroke-miterlimit: 10;
+}
+
+.dark .stroke {
+  stroke: #aba4f7;
+}
+
+.stroke.red {
+  stroke: #b51b1b88;
+}
+
+.loading-browser-content {
+  fill: #aba4f7;
+}
+
+.dark .loading-browser-content {
+  fill: #86888b;
+}
+
+.loading-inner-browser {
+  fill: #aba4f7;
+}
+
+.dark .loading-inner-browser {
+  fill: #aba4f7;
+}
+
+.round-end {
+  stroke-linecap: round;
+}
+
+.text,
+.button {
+  animation: fadeIn 1.5s 2s ease-in infinite;
+  animation-direction: alternate;
+}
+
+#noVNC_keyboard_control .button {
+  animation: pulse 1.5s 2s linear infinite !important;
+  opacity: 1;
+  animation-direction: normal;
+}
+
+.store {
+  animation: fadeIn 0.8s ease-in;
+}
+
+.browser {
+  transform: translateY(-100%);
+  -webkit-animation: moveDown 1.5s cubic-bezier(0.77, -0.5, 0.3, 1.5) forwards;
+  animation: moveDown 1.5s cubic-bezier(0.77, -0.5, 0.3, 1.5) forwards;
+}
+
+.browser.error {
+  opacity: 0;
+  transform: translateY(0);
+  -webkit-animation: fadeIn 1.5s cubic-bezier(0.77, -0.5, 0.3, 1.5) forwards;
+  animation: fadeIn 1.5s cubic-bezier(0.77, -0.5, 0.3, 1.5) forwards;
+}
+
+.window {
+  animation: fadeIn 0.5s 1.8s ease-in forwards;
+}
+
+.window,
+.box,
+.text,
+.button {
+  opacity: 0;
+}
+
+.box {
+  transform-origin: 430px 100px;
+  animation: moveBox 14s 4s linear forwards infinite;
+}
+
+@keyframes pulse {
+  0%,
+  70%,
+  90%,
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+  80% {
+    transform: scale3d(1.2, 1.2, 1);
+  }
+}
+
+@keyframes borderGradient {
+  0%,
+  100% {
+    background-position: 0% 100%;
+  }
+  50% {
+    background-position: 100% 0%;
+  }
+}
+
+@keyframes borderGradientRed {
+  0% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes moveDown {
+  from {
+    transform: translate(0, -100%);
+  }
+  to {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveBox {
+  0% {
+    opacity: 0;
+    transform: translate(0, -150px) rotate(20deg);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(0, 100px) rotate(-15deg);
+  }
+  25% {
+    transform: translate(0, 250px) rotate(10deg);
+  }
+  30% {
+    transform: translate(0, 350px) rotate(-5deg);
+  }
+  35% {
+    opacity: 1;
+    transform: translate(0, 570px) rotate(0deg);
+  }
+  45%,
+  100% {
+    opacity: 0;
+    transform: translate(0, 570px);
+  }
+}
+
+@keyframes fadeInOut {
+  5%,
+  12% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0;
+  }
+}
